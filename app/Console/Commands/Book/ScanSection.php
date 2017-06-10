@@ -1,12 +1,12 @@
 <?php
 namespace App\Console\Commands\Book;
 
-use App\Model\Chapter;
 use DB;
 use File;
 use App\Model\Book;
+use App\Model\Chapter;
 use App\Model\Section;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 
 class ScanSection extends Command
@@ -47,16 +47,29 @@ class ScanSection extends Command
         Book::whereNotNull('path')->orderBy('id')->chunk(20, function ($books) {
             $bookData = [];
             foreach ($books as $book) {
-                foreach (File::allFiles($book->path) as $file) {
-                    $name                            = str_replace("$book->path/", '', $file);
-                    $path                            = explode('/', $name);
-                    $chapter                         = $path[count($path) - 2];
-                    $section                         = $path[count($path) - 1];
-                    $bookData[$book->id][$chapter][] = [
-                        'book_id' => $book->id,
-                        'name'    => $section,
-                        'path'    => $file,
-                    ];
+                $len      = strlen($book->path) + 1;
+                $bookPath = mb_convert_encoding($book->path, 'gb2312', "utf-8");
+                foreach (File::allFiles($bookPath) as $file) {
+                    $file = mb_convert_encoding($file, "utf-8", 'gb2312');
+                    if (Str::endsWith($file, 'txt')) {
+                        $name = substr($file, $len);
+                        $path = explode('\\', $name);
+                        if (count($path) >= 2) {
+                            $chapter                         = $path[count($path) - 2];
+                            $section                         = $path[count($path) - 1];
+                            $bookData[$book->id][$chapter][] = [
+                                'book_id' => $book->id,
+                                'name'    => $section,
+                                'path'    => $file,
+                            ];
+                        } else {
+                            $bookData[$book->id][$book->name][] = [
+                                'book_id' => $book->id,
+                                'name'    => $path[0],
+                                'path'    => $file,
+                            ];
+                        }
+                    }
                 }
             }
             $sectionData  = [];//章节

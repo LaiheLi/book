@@ -42,13 +42,17 @@ class ScanBook extends Command
     public function handle()
     {
         $root = config('book.root');
+        $len  = strlen($root) + 1;
         foreach (File::directories($root) as $directory) {
-            $name = str_replace("$root/", '', $directory);
+            $directory = mb_convert_encoding($directory, "utf-8", 'gb2312');
+            $name      = substr($directory, $len);
             if ($book = Book::where('name', $name)) {
                 $book->update(['path' => $directory]);
-            }else{
+            } else {
                 \Log::error("$name  没有找到");
             }
         }
     }
 }
+
+             

@@ -39,8 +39,9 @@ class SectionController extends Controller
     public function edit($id)
     {
         $section = Section::find($id);
-        if (File::exists($section->path)) {
-            $txt = File::get($section->path);
+        $path    = mb_convert_encoding($section->path, 'gb2312', "utf-8");
+        if (File::exists($path)) {
+            $txt = File::get($path);
         } else {
             $txt = '未找到文件';
         }
