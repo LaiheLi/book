@@ -86,6 +86,7 @@ class BookController extends Controller
     public function image($id)
     {
         $file = config('book.image_path') . '/' . Book::find($id)->cover;
+        $file = mb_convert_encoding($file, 'gb2312', "utf-8");
         if (File::exists($file)) {
             return Image::make($file)->response();
         }
