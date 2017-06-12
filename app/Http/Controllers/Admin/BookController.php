@@ -32,39 +32,45 @@ class BookController extends Controller
         Excel::create('book ' . date('Y-m-d H:i:s'), function ($excel) {
             $excel->sheet('book', function ($sheet) {
                 $sheet->setWidth(array(
-                    'A'     =>  10,
-                    'C'     =>  40,
-                    'D'     =>  10,
-                    'E'     =>  60,
-                    'F'     =>  30,
-                    'K'     =>  100
+                    'A' => 10,
+                    'C' => 40,
+                    'D' => 10,
+                    'E' => 60,
+                    'F' => 30,
+                    'K' => 100
                 ));
-                $sheet->fromArray(Book::handle()->orderBy('handle')->orderBy('name')->take(2000)->get()->map(function ($item) {
-                    return [
-                        'id'               => $item->id,
-                        'tosortid'         => NULL,
-                        'name'             => $item->name,
-                        'type'             => $item->catalog,
-                        'cover'            => '/resource_library/电子书/封面/' . $item->cover,
-                        'author'           => $item->author,
-                        'origin'           => NULL,
-                        'copyright'        => NULL,
-                        'url'              => NULL,
-                        'size'             => NULL,
-                        'description'      => $item->description,
-                        'content'          => NULL,
-                        'm_contents'       => NULL,
-                        'm_resources'      => NULL,
-                        'm_resources_url'  => NULL,
-                        'm_sortid'         => NULL,
-                        'm_clicks'         => NULL,
-                        'm_like'           => NULL,
-                        'm_createdate'     => NULL,
-                        'm_createdatetime' => NULL,
-                        'm_updatedate'     => NULL,
-                        'm_updatedatetime' => NULL
-                    ];
-                })->toArray());
+                $sheet->fromArray(Book::handle()
+                                      ->orderBy('handle')
+                                      ->orderBy('name')
+                                      ->take(2000)
+                                      ->get()
+                                      ->map(function ($item) {
+                                          return [
+                                              'id'               => $item->id,
+                                              'tosortid'         => NULL,
+                                              '书名'               => $item->name,
+                                              '类别'               => $item->catalog,
+                                              '封面'               => '/resource_library/电子书/封面/' . $item->cover,
+                                              'author'           => $item->author,
+                                              'origin'           => NULL,
+                                              'copyright'        => NULL,
+                                              'url'              => NULL,
+                                              'size'             => NULL,
+                                              'description'      => $item->description,
+                                              'content'          => NULL,
+                                              'm_contents'       => NULL,
+                                              'm_resources'      => NULL,
+                                              'm_resources_url'  => NULL,
+                                              'm_sortid'         => NULL,
+                                              'm_clicks'         => NULL,
+                                              'm_like'           => NULL,
+                                              'm_createdate'     => NULL,
+                                              'm_createdatetime' => NULL,
+                                              'm_updatedate'     => NULL,
+                                              'm_updatedatetime' => NULL
+                                          ];
+                                      })
+                                      ->toArray());
             });
         })->download('xlsx');
     }
