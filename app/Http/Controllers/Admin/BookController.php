@@ -31,13 +31,21 @@ class BookController extends Controller
         ini_set('memory_limit', '1024m');
         Excel::create('book ' . date('Y-m-d H:i:s'), function ($excel) {
             $excel->sheet('book', function ($sheet) {
-                $sheet->fromArray(Book::handle(TRUE)->orderBy('handle')->orderBy('name')->get()->map(function ($item) {
+                $sheet->setWidth(array(
+                    'A'     =>  10,
+                    'C'     =>  40,
+                    'D'     =>  10,
+                    'E'     =>  60,
+                    'F'     =>  30,
+                    'K'     =>  100
+                ));
+                $sheet->fromArray(Book::handle()->orderBy('handle')->orderBy('name')->take(2000)->get()->map(function ($item) {
                     return [
                         'id'               => $item->id,
                         'tosortid'         => NULL,
                         'name'             => $item->name,
                         'type'             => $item->catalog,
-                        'cover'            => $item->cover,
+                        'cover'            => '/resource_library/电子书/封面/' . $item->cover,
                         'author'           => $item->author,
                         'origin'           => NULL,
                         'copyright'        => NULL,

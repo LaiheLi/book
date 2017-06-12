@@ -110,4 +110,3 @@
         })
     </script>
 @endsection
-a:6:{s:15:"self_background";s:29:"/upload/2017/06/05/333936.png";s:6:"nodate";b:1;s:8:"nameleft";s:18:"314.75409836065575";s:7:"nametop";s:18:"276.34749034749035";s:8:"dateleft";s:18:"318.25136612021856";s:7:"datetop";s:17:"734.5945945945946";}
