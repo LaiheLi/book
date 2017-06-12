@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 
 use DB;
 use File;
+use Excel;
 use Image;
 use App\Model\Book;
 use Illuminate\Http\Request;
@@ -23,6 +24,41 @@ class BookController extends Controller
             'data'     => Book::catalog($request->get('catalog'))->orderBy('handle')->orderBy('name')->paginate(10),
             'catalogs' => Book::groupBy('catalog')->get([DB::raw('DISTINCT(catalog)'), DB::raw('count(id) as num')])
         ]);
+    }
+
+    public function export()
+    {
+        ini_set('memory_limit', '1024m');
+        Excel::create('book ' . date('Y-m-d H:i:s'), function ($excel) {
+            $excel->sheet('book', function ($sheet) {
+                $sheet->fromArray(Book::handle(TRUE)->orderBy('handle')->orderBy('name')->get()->map(function ($item) {
+                    return [
+                        'id'               => $item->id,
+                        'tosortid'         => NULL,
+                        'name'             => $item->name,
+                        'type'             => $item->catalog,
+                        'cover'            => $item->cover,
+                        'author'           => $item->author,
+                        'origin'           => NULL,
+                        'copyright'        => NULL,
+                        'url'              => NULL,
+                        'size'             => NULL,
+                        'description'      => $item->description,
+                        'content'          => NULL,
+                        'm_contents'       => NULL,
+                        'm_resources'      => NULL,
+                        'm_resources_url'  => NULL,
+                        'm_sortid'         => NULL,
+                        'm_clicks'         => NULL,
+                        'm_like'           => NULL,
+                        'm_createdate'     => NULL,
+                        'm_createdatetime' => NULL,
+                        'm_updatedate'     => NULL,
+                        'm_updatedatetime' => NULL
+                    ];
+                })->toArray());
+            });
+        })->download('xlsx');
     }
 
     /**

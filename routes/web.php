@@ -15,6 +15,7 @@ Route::group(['namespace' => 'Admin'], function () {
      *
      */
     Route::get('book', 'BookController@index');
+    Route::get('book/export', 'BookController@export');
     Route::get('book/{id}/edit', 'BookController@edit');
     Route::get('book/{id}/handle', 'BookController@handle');
     Route::get('book/{id}/image', 'BookController@image');

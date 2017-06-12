@@ -10,10 +10,14 @@
                     <option>请选择分类</option>
                     @foreach($catalogs as $catalog)
                         <option value="{{$catalog->catalog}}"
-                                @if(request('catalog') == $catalog->catalog)selected @endif>{{$catalog->catalog}} - {{$catalog->num}}</option>
+                                @if(request('catalog') == $catalog->catalog)selected @endif>{{$catalog->catalog}}
+                            - {{$catalog->num}}</option>
                     @endforeach
                 </select>
             </div>
+        </div>
+        <div class="col-lg-3 col-lg-offset-6">
+            <a type="button" class="btn btn-info pull-right" href="{{url('book/export')}}">导出</a>
         </div>
     </div>
     {!! $data->appends(request()->only(['catalog']))->links() !!}
