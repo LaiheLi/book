@@ -8,10 +8,10 @@
         <caption>章</caption>
         <thead>
         <tr>
-            <th>#</th>
+            <th style="width: 80px;">#</th>
+            <th style="width: 60px;">小节数</th>
+            <th style="width: 80px;">排序</th>
             <th>名称</th>
-            <th>排序</th>
-            <th>小节数</th>
             <!--th>操作</th-->
         </tr>
         </thead>
@@ -19,9 +19,9 @@
         @foreach($data as $item)
             <tr data-id="{{$item->id}}">
                 <td><a href="{{url("chapter/$item->id/edit")}}">{{$item->id}}</a></td>
-                <td><input type="text" class="form-control name" value="{{$item->name}}" data-id="{{$item->id}}"></td>
-                <td><input type="text" class="form-control order" value="{{$item->order}}" data-id="{{$item->id}}"></td>
                 <td><a href="{{url("section?chapter_id=$item->id")}}">{{$item->sectionNum}}</a></td>
+                <td><input type="text" class="form-control order" value="{{$item->order}}" data-id="{{$item->id}}"></td>
+                <td><input type="text" class="form-control name" value="{{$item->name}}" data-id="{{$item->id}}"></td>
                 <!--td>
                     <button type="button" class="btn btn-primary delete">删除</button>
                 </td-->
