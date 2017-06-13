@@ -62,11 +62,13 @@ class SectionController extends Controller
     {
         $section = Section::find($id);
         $section->update($request->all());
-        if ($section->chapter_id) {
-            return redirect("section?chapter_id=$section->chapter_id");
-        }
+        if (!$request->expectsJson()) {
+            if ($section->chapter_id) {
+                return redirect("section?chapter_id=$section->chapter_id");
+            }
 
-        return redirect("section?book_id=$section->book_id");
+            return redirect("section?book_id=$section->book_id");
+        }
     }
 
     /**
@@ -76,11 +78,6 @@ class SectionController extends Controller
      */
     public function destroy($id)
     {
-        $section    = Section::find($id);
-        $book_id    = $section->book_id;
-        $chapter_id = $section->chapter_id;
-        $section->delete();
-
-        return redirect($chapter_id ? "section?chapter_id=$chapter_id" : "section?book_id=$book_id");
+        Section::find($id)->delete();
     }
 }

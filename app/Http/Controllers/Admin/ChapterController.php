@@ -43,8 +43,9 @@ class ChapterController extends Controller
     {
         $chapter = Chapter::find($id);
         $chapter->update($request->all());
-
-        return redirect("chapter?book_id=$chapter->book_id");
+        if (!$request->expectsJson()) {
+            return redirect("chapter?book_id=$chapter->book_id");
+        }
     }
 
     /**
@@ -55,10 +56,7 @@ class ChapterController extends Controller
     public function destroy($id)
     {
         $chapter = Chapter::find($id);
-        $book_id = $chapter->book_id;
         $chapter->sections()->delete();
         $chapter->delete();
-
-        return redirect("chapter?book_id=$book_id");
     }
 }
