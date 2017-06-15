@@ -15,7 +15,7 @@ class Book extends Model
      */
     public function chapters()
     {
-        return $this->hasMany(Chapter::class);
+        return $this->hasMany(Chapter::class)->orderBy('order');
     }
 
     /**
@@ -23,7 +23,7 @@ class Book extends Model
      */
     public function sections()
     {
-        return $this->hasMany(Section::class);
+        return $this->hasMany(Section::class)->orderBy('order');
     }
 
     /**

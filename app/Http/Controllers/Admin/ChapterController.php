@@ -19,7 +19,7 @@ class ChapterController extends Controller
 
         return view('admin.chapter.index', [
             'book' => $book,
-            'data' => $book->chapters()->orderBy('order')->get()
+            'data' => $book->chapters()->get()
         ]);
     }
 

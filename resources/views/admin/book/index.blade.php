@@ -25,15 +25,16 @@
         <thead>
         <tr>
             <th>#</th>
+            <th style="width: 60px;">章数</th>
+            <th style="width: 60px;">小节数</th>
             <th></th>
             <th>名称</th>
             <th>状态</th>
             <th></th>
+            <th>导出状态</th>
             <th>分类</th>
             <th>作者</th>
             <th>类型</th>
-            <th>章数</th>
-            <th>小节数</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -41,6 +42,8 @@
         @foreach($data as $item)
             <tr data-id="{{$item->id}}">
                 <td>{{$item->id}}</td>
+                <td><a href="{{url("chapter?book_id=$item->id")}}">{{$item->chapterNum}}</a></td>
+                <td><a href="{{url("section?book_id=$item->id")}}">{{$item->sectionNum}}</a></td>
                 <td width="100px;">
                     <a href="{{url("book/$item->id/image")}}" target="_blank">
                         <img src="{{url("book/$item->id/image")}}" alt="" style="height: 40px;">
@@ -59,11 +62,14 @@
                         <button type="button" class="btn btn-warning handle">确认</button>
                     @endif
                 </td>
+                @if($item->export)
+                    <td class="done">已导出</td>
+                @else
+                    <td class="undone">未导出</td>
+                @endif
                 <td>{{$item->catalog}}</td>
                 <td>{{$item->author}}</td>
                 <td>{{$item->typeName}}</td>
-                <td><a href="{{url("chapter?book_id=$item->id")}}">{{$item->chapterNum}}</a></td>
-                <td><a href="{{url("section?book_id=$item->id")}}">{{$item->sectionNum}}</a></td>
                 <td>
                     <button type="button" class="btn btn-primary delete">删除</button>
                 </td>

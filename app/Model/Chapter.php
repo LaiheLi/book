@@ -20,7 +20,7 @@ class Chapter extends Model
      */
     public function sections()
     {
-        return $this->hasMany(Section::class);
+        return $this->hasMany(Section::class)->orderBy('order');
     }
 
     public function getSectionNumAttribute()

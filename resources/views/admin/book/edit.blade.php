@@ -17,6 +17,14 @@
             <input type="text" class="form-control" name="name" value="{{$item->name}}">
         </div>
         <div class="form-group">
+            <label>类型</label>
+            <select name="type" class="form-control">
+                <option>请选择类型</option>
+                <option value="1" @if($item->type == 1)selected @endif>章-节</option>
+                <option value="0" @if($item->type == 0)selected @endif>节</option>
+            </select>
+        </div>
+        <div class="form-group">
             <label>分类</label>
             <select name="catalog" class="form-control">
                 <option>请选择分类</option>

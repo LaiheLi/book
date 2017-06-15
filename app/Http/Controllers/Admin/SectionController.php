@@ -27,7 +27,7 @@ class SectionController extends Controller
         return view('admin.section.index', [
             'book'    => $book,
             'chapter' => $chapter,
-            'data'    => $data->orderBy('order')->get(),
+            'data'    => $data->get(),
         ]);
     }
 
