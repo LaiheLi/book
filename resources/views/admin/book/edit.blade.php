@@ -19,9 +19,9 @@
         <div class="form-group">
             <label>类型</label>
             <select name="type" class="form-control">
-                <option>请选择类型</option>
+                <option value="0">请选择类型</option>
                 <option value="1" @if($item->type == 1)selected @endif>章-节</option>
-                <option value="0" @if($item->type == 0)selected @endif>节</option>
+                <option value="2" @if($item->type == 2)selected @endif>节</option>
             </select>
         </div>
         <div class="form-group">
