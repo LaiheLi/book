@@ -125,7 +125,7 @@ class Export extends Command
                         if (!File::exists($txt)) {
                             App::abort(404, "$section->id 节文件: $txt 不存在");
                         }
-                        File::copy($txt, $this->encode($config['export'] . "/$book->type/$book->name/$txtName"));
+                        File::copy($txt, $this->encode($config['export'] . "/$book->catalog/$book->name/$txtName"));
                         $sectionData[$i++] = [
                             'id'                  => $section->id,
                             'tosortid'            => NULL,
