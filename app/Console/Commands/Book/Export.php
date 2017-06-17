@@ -43,10 +43,16 @@ class Export extends Command
             $sectionData = [];
             File::makeDirectory($this->encode($config['export'] . '/封面/'), 755, TRUE, TRUE);
             foreach ($books as $book) {
+                echo "book = $book->id";
                 $cover = $this->encode($config['image_path'] . '/' . $book->cover);
                 //没有封面，不处理
                 if (!File::exists($cover)) {
                     continue;
+                }
+                foreach ($book->sections as $section) {
+                    if (!File::exists($this->encode($section->path))) {
+                        continue 2;
+                    }
                 }
                 File::copy($cover, $this->encode($config['export'] . '/封面/' . $book->cover));
                 File::makeDirectory($this->encode($config['export'] . "/$book->catalog/$book->name/"), 755, TRUE, TRUE);
@@ -86,9 +92,6 @@ class Export extends Command
                         foreach ($chapter->sections as $section) {
                             $txt     = $this->encode($section->path);
                             $txtName = str_replace('.txt', '', $section->name) . '.txt';
-                            if (!File::exists($txt)) {
-                                App::abort(404, "$section->id 节文件: $txt 不存在");
-                            }
                             File::copy($txt,
                                 $this->encode(
                                     $config['export'] . "/$book->catalog/$book->name/$chapter->name/$txtName"
@@ -124,9 +127,6 @@ class Export extends Command
                     foreach ($book->sections as $section) {
                         $txt     = $this->encode($section->path);
                         $txtName = str_replace('.txt', '', $section->name) . '.txt';
-                        if (!File::exists($txt)) {
-                            App::abort(404, "$section->id 节文件: $txt 不存在");
-                        }
                         File::copy($txt, $this->encode($config['export'] . "/$book->catalog/$book->name/$txtName"));
                         $sectionData[$i++] = [
                             'id'                  => $section->id,
