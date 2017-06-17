@@ -1,6 +1,7 @@
 <?php
 namespace App\Console\Commands\Book;
 
+use DB;
 use App;
 use File;
 use Excel;
@@ -31,6 +32,7 @@ class Export extends Command
     public function handle()
     {
         try {
+            DB::beginTransaction();
             $i      = 1;
             $config = config('book');
             $books  = Book::where(['handle' => TRUE, 'export' => FALSE])->orderBy('catalog')->get();
@@ -178,8 +180,10 @@ class Export extends Command
                     $sheet->fromArray($sectionData);
                 });
             })->save('xlsx', $config['export']);
+            DB::commit();
         } catch (\Exception $e) {
-            echo $e->getMessage() . PHP_EOL;
+            DB::rollBack();
+            echo $e->getLine() . ':' . $e->getMessage() . PHP_EOL;
         }
     }
 
