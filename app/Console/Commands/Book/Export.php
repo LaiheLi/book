@@ -185,12 +185,12 @@ class Export extends Command
 
     private function encode($path)
     {
-        return mb_convert_encoding($path, "utf-8", 'gb2312');
+        return mb_convert_encoding(str_replace('/', '\\', $path), 'gb2312', "utf-8");
     }
 
     private function decode($path)
     {
-        return mb_convert_encoding($path, 'gb2312', "utf-8");
+        return mb_convert_encoding($path, "utf-8", 'gb2312');
     }
 
     private function formatData($data)
