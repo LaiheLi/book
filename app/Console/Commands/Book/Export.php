@@ -32,7 +32,6 @@ class Export extends Command
     public function handle()
     {
         try {
-            DB::beginTransaction();
             $i      = 1;
             $config = config('book');
             $books  = Book::where(['handle' => TRUE, 'export' => FALSE])->orderBy('catalog')->get();
@@ -43,7 +42,7 @@ class Export extends Command
             $sectionData = [];
             File::makeDirectory($this->encode($config['export'] . '/封面/'), 755, TRUE, TRUE);
             foreach ($books as $book) {
-                echo "book = $book->id";
+                echo "book = $book->id" . PHP_EOL;
                 $cover = $this->encode($config['image_path'] . '/' . $book->cover);
                 //没有封面，不处理
                 if (!File::exists($cover)) {
@@ -153,10 +152,8 @@ class Export extends Command
                         ];
                     }
                 }
-                $book->export = TRUE;
-                $book->save();
             }
-            Excel::create('电子书目录', function ($excel) use ($bookData) {
+            Excel::create($this->encode('电子书目录'), function ($excel) use ($bookData) {
                 $excel->sheet('Sheet1', function ($sheet) use ($bookData) {
                     $sheet->setWidth(array(
                         'A' => 10,
@@ -168,8 +165,8 @@ class Export extends Command
                     ));
                     $sheet->fromArray($bookData);
                 });
-            })->store('xlsx', $config['export']);
-            Excel::create('电子书内容', function ($excel) use ($sectionData) {
+            })->store('xlsx', $this->encode($config['export']));
+            Excel::create($this->encode('电子书内容'), function ($excel) use ($sectionData) {
                 $excel->sheet('Sheet1', function ($sheet) use ($sectionData) {
                     $sheet->setWidth(array(
                         'A' => 10,
@@ -179,10 +176,9 @@ class Export extends Command
                     ));
                     $sheet->fromArray($sectionData);
                 });
-            })->save('xlsx', $config['export']);
-            DB::commit();
+            })->save('xlsx', $this->encode($config['export']));
+            DB::table('books')->whereIn('id', array_keys($bookData))->update(['export' => TRUE]);
         } catch (\Exception $e) {
-            DB::rollBack();
             echo $e->getLine() . ':' . $e->getMessage() . PHP_EOL;
         }
     }

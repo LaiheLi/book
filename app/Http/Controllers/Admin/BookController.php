@@ -23,8 +23,8 @@ class BookController extends Controller
         return view('admin.book.index', [
             'data'     => Book::catalog($request->get('catalog'))
                               ->orderBy('handle')
-                              ->orderBy('name')
                               ->orderBy('export', 'desc')
+                              ->orderBy('name')
                               ->paginate(10),
             'catalogs' => Book::groupBy('catalog')->get([DB::raw('DISTINCT(catalog)'), DB::raw('count(id) as num')])
         ]);
