@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        Commands\Book\Export::class,
         Commands\Book\Import::class,
         Commands\Book\ScanBook::class,
         Commands\Book\ScanSection::class,
