@@ -195,9 +195,9 @@ class Export extends Command
 
     private function formatData($data)
     {
-        $str = "{name:\"$data[name]\",data:[";
+        $str = "{\"name\":\"$data[name]\",\"data\":[";
         foreach ($data['data'] as $item) {
-            $str .= "{name:\"$item[name]\",url:\"$item[url]\"},";
+            $str .= "{\"name\":\"$item[name]\",\"url\":\"$item[url]\"},";
         }
         $str = substr($str, 0, -1);
 
