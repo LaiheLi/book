@@ -19,6 +19,7 @@ Route::group(['namespace' => 'Admin'], function () {
     Route::get('book/{id}/edit', 'BookController@edit');
     Route::get('book/{id}/handle', 'BookController@handle');
     Route::get('book/{id}/image', 'BookController@image');
+    Route::get('book/{id}/test', 'BookController@test');
     Route::post('book/{id}', 'BookController@update');
     Route::delete('book/{id}', 'BookController@destroy');
     /*

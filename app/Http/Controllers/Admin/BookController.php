@@ -145,4 +145,28 @@ class BookController extends Controller
             return Image::make($file)->response();
         }
     }
+
+    /**
+     * 测试书籍是否可以下载
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function test($id)
+    {
+        $book  = Book::find($id);
+        $cover = $this->encode(config('book.image_path') . '/' . $book->cover);
+        //没有封面，不处理
+        if (!File::exists($cover)) {
+            return response()->json(['status' => FALSE, 'message' => '书籍封面未找到']);
+        }
+        foreach ($book->sections as $section) {
+            if (!File::exists($this->encode($section->path))) {
+                return response()->json(['status' => FALSE, 'message' => "节：$section->id：$section->name 未找到txt文件"]);
+            }
+        }
+
+        return response()->json(['status' => TRUE]);
+    }
 }

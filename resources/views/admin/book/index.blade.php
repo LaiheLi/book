@@ -65,7 +65,10 @@
                 @if($item->export)
                     <td class="done">已导出</td>
                 @else
-                    <td class="undone">未导出</td>
+                    <td class="undone">
+                        未导出
+                        <button type="button" class="btn btn-warning test">测试</button>
+                    </td>
                 @endif
                 <td>{{$item->catalog}}</td>
                 <td>{{$item->author}}</td>
@@ -106,6 +109,23 @@
                     type: 'get',
                     success: function () {
                         location.reload()
+                    }
+                });
+            });
+            //确认书籍是否可以导出
+            $('.test').on('click', function () {
+                var $this = $(this);
+                var id = $this.parent().parent().data('id');
+                $this.button('loading');
+
+                $.ajax({
+                    url: 'book/' + id + '/test',
+                    type: 'get',
+                    success: function (ret) {
+                        if (!ret.status) {
+                            alert(ret.message)
+                        }
+                        $this.button('reset')
                     }
                 });
             });
