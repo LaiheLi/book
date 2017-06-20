@@ -15,3 +15,7 @@
 .table > tbody > tr > td.undone {
     background-color: yellow;
 }
+.table > tbody > tr > td.unTest {
+    background-color: orangered;
+    text-align: left;
+}

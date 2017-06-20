@@ -20,12 +20,17 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
+        $data = Book::catalog($request->get('catalog'))
+                    ->orderBy('handle')
+                    ->orderBy('export', 'desc')
+                    ->orderBy('name')
+                    ->paginate(10);
+        foreach ($data as $item) {
+            $item->test = $this->testBook($item->id);
+        }
+
         return view('admin.book.index', [
-            'data'     => Book::catalog($request->get('catalog'))
-                              ->orderBy('handle')
-                              ->orderBy('export', 'desc')
-                              ->orderBy('name')
-                              ->paginate(10),
+            'data'     => $data,
             'catalogs' => Book::groupBy('catalog')->get([DB::raw('DISTINCT(catalog)'), DB::raw('count(id) as num')])
         ]);
     }
@@ -155,18 +160,32 @@ class BookController extends Controller
      */
     public function test($id)
     {
+        $result = $this->testBook($id);
+        if (TRUE === $result) {
+            return response()->json(['status' => TRUE]);
+        }
+
+        return response()->json(['status' => FALSE, 'message' => $result]);
+    }
+
+    /**
+     * @param $id
+     *
+     * @return bool
+     */
+    private function testBook($id)
+    {
         $book  = Book::find($id);
         $cover = $this->encode(config('book.image_path') . '/' . $book->cover);
-        //没有封面，不处理
         if (!File::exists($cover)) {
-            return response()->json(['status' => FALSE, 'message' => "书籍封面未找到\n$book->cover"]);
+            return "书籍封面未找到\n$book->cover";
         }
         foreach ($book->sections as $section) {
             if (!File::exists($this->encode($section->path))) {
-                return response()->json(['status' => FALSE, 'message' => "节：$section->id：$section->name 未找到txt文件\n$section->path"]);
+                return "节：$section->id：$section->name 未找到txt文件\n$section->path";
             }
         }
 
-        return response()->json(['status' => TRUE]);
+        return TRUE;
     }
 }

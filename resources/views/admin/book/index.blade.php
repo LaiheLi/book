@@ -35,6 +35,7 @@
             <th>分类</th>
             <th>作者</th>
             <th>类型</th>
+            <th>测试</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -73,6 +74,11 @@
                 <td>{{$item->catalog}}</td>
                 <td>{{$item->author}}</td>
                 <td>{{$item->typeName}}</td>
+                @if($item->test === TRUE)
+                    <td></td>
+                @else
+                    <td class="unTest">{{$item->test}}</td>
+                @endif
                 <td>
                     <button type="button" class="btn btn-primary delete">删除</button>
                 </td>
