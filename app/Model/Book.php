@@ -68,6 +68,23 @@ class Book extends Model
     }
 
     /**
+     * 书籍名称
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $model
+     * @param null                                  $name
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeName($model, $name = NULL)
+    {
+        if ($name) {
+            return $model->where('name', 'like', "%$name%");
+        } else {
+            return $model;
+        }
+    }
+
+    /**
      * 书籍状态
      *
      * @param \Illuminate\Database\Eloquent\Builder $model

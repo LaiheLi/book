@@ -21,6 +21,7 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $data = Book::catalog($request->get('catalog'))
+                    ->name($request->get('name'))
                     ->orderBy('handle')
                     ->orderBy('export', 'desc')
                     ->orderBy('name')
